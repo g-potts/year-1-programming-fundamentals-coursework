@@ -10,12 +10,13 @@ public class Student {
 	
 	public Student(String name, int urn) {
 		this.moduleList = new ArrayList<Module>();
-		if (name.matches("[A-Z][a-z]* [A-Z][a-z]*")) {
+		if (name.matches("[A-Z][a-z]* [A-Z][a-z]*") && (urn >= 10000) && (urn <= 99999)) {
 			this.name = name;
+			this.urn = urn;
 		} else {
-			this.name = "Error";
+			this.name = "INVALID STUDENT";
+			this.urn = 0;
 		}
-		this.urn = urn;
 	}
 
 	public String getName() {

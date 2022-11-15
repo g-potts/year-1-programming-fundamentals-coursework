@@ -24,16 +24,16 @@ public class StudentJTest {
 
 	@Test
 	public void lab7_testInvalidStudentConstruction() {
-		student = new Student("Stella Kazamia", 12345);
-		assertEquals("Stella Kazamia", student.getName());
-		assertEquals(12345, student.getUrn());
+		student = new Student("stella kazamia", 12345);
+		assertEquals("INVALID STUDENT", student.getName());
+		assertEquals(0, student.getUrn());
 	}
 
 	@Test
 	public void lab7_testInvalidStudentConstruction2() {
-		student = new Student("Joe Bloggs", 34567);
-		assertEquals("Joe Bloggs", student.getName());
-		assertEquals(34567, student.getUrn());
+		student = new Student("Joe Bloggs", -1);
+		assertEquals("INVALID STUDENT", student.getName());
+		assertEquals(0, student.getUrn());
 	}
 	@Test
 	public void lab7_testAddModuleList() {
