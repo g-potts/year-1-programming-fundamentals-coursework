@@ -1,5 +1,4 @@
 package lab8_exercise2;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

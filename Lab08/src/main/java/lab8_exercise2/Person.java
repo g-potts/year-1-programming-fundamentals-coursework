@@ -1,6 +1,5 @@
 package lab8_exercise2;
 
-
 /**
  * Class representing attributes and behaviour of a person.
  * 

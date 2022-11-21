@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
+//import java.util.StringTokenizer;
 
 public class PersonTracker {
 	
@@ -40,11 +40,13 @@ public class PersonTracker {
 	
 	private void breakLine(String line) {
 		//takes line and splits into forename, surname, age into addperson
-		StringTokenizer words = new StringTokenizer(line);
-		String fname = words.nextToken();
-		String lname = words.nextToken();
-		int age = Integer.parseInt(words.nextToken());
-		addPerson(fname, lname, age);
+//		StringTokenizer words = new StringTokenizer(line);
+//		String fname = words.nextToken();
+//		String lname = words.nextToken();
+//		int age = Integer.parseInt(words.nextToken());
+//		addPerson(fname, lname, age);
+		String[] details = line.split(" ");
+		addPerson(details[0], details[1], Integer.parseInt(details[2]));
 	}
 	
 	private void addPerson(String forename, String surname, int age) {
