@@ -35,9 +35,7 @@ public class Auctioneer {
 		 * */
 		StringBuffer output = new StringBuffer();
 		output.append("SOLD CARS:\n");
-		for (int i = 0; i < soldCars.size(); i++) {
-			output.append(soldCars.);
-		}
+		
 	}
 	
 	public String displayStatistics() {
@@ -67,7 +65,19 @@ public class Auctioneer {
 	}
 	
 	public void registerCar(Advert carAdvert, User user, String colour, CarType type, CarBody body, int noOfSeats) {
-		//registers car IF not registered yet. 
+		if (!unsoldCars.containsKey(carAdvert)) {
+			try {
+				carAdvert.getCar().setBody(body);
+				carAdvert.getCar().setColour(colour);
+				carAdvert.getCar().setGearbox(type);
+				carAdvert.getCar().setNumberOfSeats(noOfSeats);
+				
+				carsForSale.put(carAdvert, user);
+				unsoldCars.put(carAdvert, user);
+			} catch (IllegalArgumentException e) {
+				//TODO exception stuff
+			}
+		}
 	}
 	
 	//getters setters
