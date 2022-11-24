@@ -1,5 +1,7 @@
 package coursework_question1;
 
+import java.text.DecimalFormat;
+
 public class Car {
 	
 	private int id;
@@ -12,11 +14,16 @@ public class Car {
 	private Condition condition;
 	
 	//constructor - id, name, price, condition
-	public Car(int id, String name, double price, Condition condition) { // TODO illegal argument exception on id, name, price
-		this.id = id;
-		this.name = name;
-		this.reservedPrice = price;
-		this.condition = condition;
+	public Car(int id, String name, double price, Condition condition) {
+		if ((name == null) || (id < 0) || (price < 0)) {
+			throw new IllegalArgumentException("invalid parameters");
+		} else {
+			this.id = id;
+			this.name = name;
+			this.reservedPrice = price;
+			this.condition = condition;
+		}
+		
 	}
 	//methods:
 	public String displayCarSpecification() {
@@ -27,6 +34,15 @@ public class Car {
 		 * 		no. of seats: number\n
 		 * 		Condition: condition
 		 * */
+		DecimalFormat d = new DecimalFormat("0.00");
+		StringBuffer output = new StringBuffer();
+		output.append(this.toString() + " (£" + d.format(reservedPrice) + ")\n");
+		output.append("	Type: " + this.gearbox + "\n");
+		output.append("	Style: " + this.body + "\n");
+		output.append("	Colour: " + this.colour + "\n");
+		output.append("	No. of Seats: " + this.numberOfSeats + "\n");
+		output.append("	Condition: " + this.condition);
+		return output.toString();
 	}
 
 	@Override
@@ -34,6 +50,7 @@ public class Car {
 		/*
 		 * layout: id - name
 		 * */
+		return (Integer.toString(this.id) + " - " + this.name);
 	}
 	
 	
@@ -55,7 +72,7 @@ public class Car {
 		this.gearbox = gearbox;
 	}
 
-	public CarBody getBody() {
+	public CarBody getBodyStyle() {
 		return body;
 	}
 
@@ -79,7 +96,7 @@ public class Car {
 		return name;
 	}
 
-	public double getReservedPrice() {
+	public double getPrice() {
 		return reservedPrice;
 	}
 }

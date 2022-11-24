@@ -1,6 +1,6 @@
 package coursework_question1;
 
-import java.util.StringTokenizer;
+//import java.util.StringTokenizer;
 
 public class User {
 	
@@ -16,8 +16,10 @@ public class User {
 	
 	public String getName() {
 		//only first name!!
-		StringTokenizer namesplit = new StringTokenizer(fullname);
-		return namesplit.nextToken();
+//		StringTokenizer namesplit = new StringTokenizer(fullname);
+//		return namesplit.nextToken();
+		
+		return (fullname.split(" ")[0]);
 	}
 	
 	@Override
