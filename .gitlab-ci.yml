@@ -167,3 +167,16 @@ test-lab11:
     LAB: Lab11
   needs:
     - build-lab11
+
+build-cw:
+  <<: [*build]
+  variables:
+    LAB: Coursework
+
+test-cw:
+  <<: [*test]
+  variables:
+    LAB: Coursework
+  needs:
+    - build-cw
+
