@@ -16,12 +16,21 @@ public class Advert {
 	//methods
 	public Offer getHighestOffer() {
 		//TODO what
+		return new Offer(new User("Aa Bb"), 2000);
 	}
 	
 	public boolean placeOffer(User buyer, double value) {
-		//only add and return true if car is for sale
-		if (this.car )
-		offers.add(new Offer(buyer, value));
+		for (Offer o : offers) {
+			if (o.getBuyer() == buyer) {
+				if (o.getValue() > value) {
+					return false;
+				} else {
+					this.offers.add(new Offer(buyer, value));
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	@Override

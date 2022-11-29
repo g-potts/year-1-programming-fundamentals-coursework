@@ -35,6 +35,14 @@ public class Auctioneer {
 		 * */
 		StringBuffer output = new StringBuffer();
 		output.append("SOLD CARS:\n");
+		//for each advert in soldCars:
+		for (Advert advert : soldCars.keySet()) {
+			output.append(advert.getCar().getId());
+			output.append(" - Purchased by ");
+			output.append(soldCars.get(advert).getName());
+			output.append(" with a successful £" + advert.getHighestOffer() + "bid.\n");
+		}
+		return output.toString();
 		
 	}
 	
@@ -52,15 +60,24 @@ public class Auctioneer {
 	}
 	
 	public void endSale(Advert advert) {
-		unsoldCars.remove(advert);
+		if (unsoldCars.containsKey(advert)) {
+			unsoldCars.remove(advert);
+		} else {
+			throw new IllegalArgumentException("advert not in unsold cars");
+		}
+		
 	}
 	
 	public boolean placeOffer(Advert carAdvert, User user, double value) {
-		if (this.checkExistence(carAdvert.getCar())) {
-			carAdvert.placeOffer(user, value);
-			return true;
-		} else {
-			return false;
+		try {
+			if (this.checkExistence(carAdvert.getCar())) {
+				carAdvert.placeOffer(user, value);
+				return true;
+			} else {
+				return false;
+			}
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("advert does not exist");
 		}
 	}
 	
@@ -75,7 +92,7 @@ public class Auctioneer {
 				carsForSale.put(carAdvert, user);
 				unsoldCars.put(carAdvert, user);
 			} catch (IllegalArgumentException e) {
-				//TODO exception stuff
+				//TODO exception stuff?
 			}
 		}
 	}
