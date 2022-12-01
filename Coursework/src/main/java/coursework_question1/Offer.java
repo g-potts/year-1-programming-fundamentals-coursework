@@ -26,6 +26,10 @@ public class Offer {
 		return this.buyer;
 	}
 	
+	public double getValue() {
+		return this.value;
+	}
+	
 	//tostring: fullname offered £value
 	@Override
 	public String toString() {

@@ -35,9 +35,15 @@ public class Auctioneer {
 		 * */
 		StringBuffer output = new StringBuffer();
 		output.append("SOLD CARS:\n");
-		for (int i = 0; i < soldCars.size(); i++) {
-			output.append(soldCars.);
+		//for each advert in soldCars:
+		for (Advert advert : soldCars.keySet()) {
+			output.append(advert.getCar().getId());
+			output.append(" - Purchased by ");
+			output.append(soldCars.get(advert).getName());
+			output.append(" with a successful £" + advert.getHighestOffer() + "bid.\n");
 		}
+		return output.toString();
+		
 	}
 	
 	public String displayStatistics() {
@@ -54,20 +60,41 @@ public class Auctioneer {
 	}
 	
 	public void endSale(Advert advert) {
-		unsoldCars.remove(advert);
+		if (unsoldCars.containsKey(advert)) {
+			unsoldCars.remove(advert);
+		} else {
+			throw new IllegalArgumentException("advert not in unsold cars");
+		}
+		
 	}
 	
 	public boolean placeOffer(Advert carAdvert, User user, double value) {
-		if (this.checkExistence(carAdvert.getCar())) {
-			carAdvert.placeOffer(user, value);
-			return true;
-		} else {
-			return false;
+		try {
+			if (this.checkExistence(carAdvert.getCar())) {
+				carAdvert.placeOffer(user, value);
+				return true;
+			} else {
+				return false;
+			}
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("advert does not exist");
 		}
 	}
 	
 	public void registerCar(Advert carAdvert, User user, String colour, CarType type, CarBody body, int noOfSeats) {
-		//registers car IF not registered yet. 
+		if (!unsoldCars.containsKey(carAdvert)) {
+			try {
+				carAdvert.getCar().setBody(body);
+				carAdvert.getCar().setColour(colour);
+				carAdvert.getCar().setGearbox(type);
+				carAdvert.getCar().setNumberOfSeats(noOfSeats);
+				
+				carsForSale.put(carAdvert, user);
+				unsoldCars.put(carAdvert, user);
+			} catch (IllegalArgumentException e) {
+				//TODO exception stuff?
+			}
+		}
 	}
 	
 	//getters setters
