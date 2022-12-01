@@ -27,12 +27,19 @@ public class Guest implements IGuest {
 
 	@Override
 	public double calculateTotalChargeWithoutVAT() {
-		return 0;
+		//= total charge
+		double count = 0;
+		for (Charge c : charges) {
+			count += c.getCharge();
+		}
+		return count;
 	}
 
 	@Override
 	public double calculateVATChargeAtRate(VATRate rate) {
-		return 0;
+		// = sum of charges multiplied by vat rate
+		double count = this.calculateTotalChargeWithoutVAT();
+		return (count * rate.getPercentage() / 100);
 	}
 	
 	@Override
