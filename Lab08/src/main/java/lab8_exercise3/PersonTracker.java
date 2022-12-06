@@ -29,10 +29,8 @@ public class PersonTracker {
 			}
 			reader.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -56,7 +54,6 @@ public class PersonTracker {
 			p = new Person(forename, surname, age);
 			this.peopleList.add(p);
 		} catch (InvalidSurnameException | InvalidAgeException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
