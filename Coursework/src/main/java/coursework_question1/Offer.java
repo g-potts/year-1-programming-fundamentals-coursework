@@ -7,21 +7,16 @@ public class Offer {
 	private double value;
 	private User buyer;
 	
-	//constructor, checks for invalid offer amt
+	//constructor, checks for invalid offer amount
 	public Offer(User buyer, double value) { 
-		if (value > 0) {
+		if (value > 0 && buyer != null) {
 			this.value = value;
+			this.buyer = buyer;
 		} else {
 			throw new IllegalArgumentException("offer has invalid amount");
 		}
-		if (buyer != null) {
-			this.buyer = buyer;
-		} else {									// TODO should this be try catch?
-			throw new IllegalArgumentException();
-		}
-
 	}
-	//simple accessor
+	//getters
 	public User getBuyer() {
 		return this.buyer;
 	}

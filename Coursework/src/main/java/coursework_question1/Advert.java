@@ -2,6 +2,7 @@ package coursework_question1;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Advert {
 	
@@ -15,15 +16,34 @@ public class Advert {
 	}
 	//methods
 	public Offer getHighestOffer() {
-		//TODO what
-		return new Offer(new User("Aa Bb"), 2000);
+		System.out.println(offers.toString());
+		Offer highestOffer = offers.get(0);
+		System.out.println("before for each loop in highestoffer");
+		for (int i = 0; i < offers.size(); i++) {
+			
+				if (offers.get(i).getValue() >= highestOffer.getValue()) {
+					highestOffer = offers.get(i);
+				}
+			
+			
+		}
+		return highestOffer;
+		
 	}
 	
 	public boolean placeOffer(User buyer, double value) {
-		for (Offer o : offers) {
-			if (o.getBuyer() == buyer) {
-				if (o.getValue() > value) {
-					return false;
+		if (offers.size() == 0) {
+			this.offers.add(new Offer(buyer, value));
+			return true;
+		} else {
+			for (Offer o : offers) {
+				if (o.getBuyer() == buyer) {
+					if (o.getValue() > value) {
+						return false;
+					} else {
+						this.offers.add(new Offer(buyer, value));
+						return true;
+					}
 				} else {
 					this.offers.add(new Offer(buyer, value));
 					return true;
@@ -31,6 +51,8 @@ public class Advert {
 			}
 		}
 		return false;
+
+		
 	}
 	
 	@Override

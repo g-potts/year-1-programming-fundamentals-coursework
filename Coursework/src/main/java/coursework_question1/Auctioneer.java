@@ -39,8 +39,8 @@ public class Auctioneer {
 		for (Advert advert : soldCars.keySet()) {
 			output.append(advert.getCar().getId());
 			output.append(" - Purchased by ");
-			output.append(soldCars.get(advert).getName());
-			output.append(" with a successful £" + advert.getHighestOffer() + "bid.\n");
+			output.append(advert.getHighestOffer().getBuyer());
+			output.append(" with a successful £" + advert.getHighestOffer().getValue() + "bid.\n"); 
 		}
 		return output.toString();
 		
@@ -54,14 +54,25 @@ public class Auctioneer {
 		StringBuffer output = new StringBuffer();
 		output.append("UNSOLD CARS:\n");
 		for (Advert advert : unsoldCars.keySet()) {
-			output.append(advert.toString());
+			if (unsoldCars.containsKey(advert)) {
+				output.append(advert.toString()); //TODO not returning anything? because endsale isnt doing the right thing?
+			}
 		}
 		return output.toString();
 	}
 	
 	public void endSale(Advert advert) {
-		if (unsoldCars.containsKey(advert)) {
-			unsoldCars.remove(advert);
+		if (unsoldCars.containsKey(advert)) {	//unsoldCars.containsKey(advert) && 
+			System.out.println("first if works");
+			
+				if ((advert.getHighestOffer()).getValue() <= advert.getCar().getPrice()) {
+					soldCars.put(advert, unsoldCars.get(advert)); //TODO user from placeOffer with highest bid
+					unsoldCars.remove(advert);
+					System.out.println("sale ended");
+				}
+			
+			
+			//System.out.println("price not lower / not working");
 		} else {
 			throw new IllegalArgumentException("advert not in unsold cars");
 		}
@@ -91,8 +102,8 @@ public class Auctioneer {
 				
 				carsForSale.put(carAdvert, user);
 				unsoldCars.put(carAdvert, user);
-			} catch (IllegalArgumentException e) {
-				//TODO exception stuff?
+			} catch (NullPointerException e) {
+				throw new IllegalArgumentException("parameters should not be null");
 			}
 		}
 	}
