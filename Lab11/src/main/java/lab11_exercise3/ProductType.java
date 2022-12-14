@@ -7,5 +7,15 @@ package lab11_exercise3;
  * 
  */
 public enum ProductType {
-	ITALIAN, CHINESE, INDIAN, TRADITIONAL
+	ITALIAN("Italian"), CHINESE("Chinese"), INDIAN("Indian"), TRADITIONAL("Traditional");
+	
+	private String description;
+	
+	private ProductType(final String description) {
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
 }
