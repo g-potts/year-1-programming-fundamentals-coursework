@@ -28,7 +28,7 @@ public class Car {
 	//methods:
 	public String displayCarSpecification() {
 		/*OUTPUT LAYOUT:
-		 * id - name (£price.00)\n 			OR 			car.toString() (£price.00)
+		 * car.toString() (£price.00)
 		 * tab	Type: gearbox\n
 		 * 		Style: body\n
 		 * 		no. of seats: number\n
@@ -47,9 +47,7 @@ public class Car {
 
 	@Override
 	public String toString() {
-		/*
-		 * layout: id - name
-		 * */
+		 //layout: id - name
 		return (Integer.toString(this.id) + " - " + this.name);
 	}
 	

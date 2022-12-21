@@ -1,14 +1,15 @@
 package coursework_question1;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Auctioneer {
 	
 	protected String name;
-	protected Map<Advert, User> carsForSale;
-	protected Map<Advert, User> soldCars;
-	protected Map<Advert, User> unsoldCars;
+	protected Map<Advert, User> carsForSale; //cars currently for sale
+	protected Map<Advert, User> soldCars; //cars bid on, sale ended successfully
+	protected Map<Advert, User> unsoldCars; //cars with sale ended unsuccessfully
 	
 	//constructor
 	public Auctioneer(String name) {
@@ -19,7 +20,7 @@ public class Auctioneer {
 	}
 	
 	//methods
-	private boolean checkExistence(Car car) {
+	private boolean checkExistence(Car car) { //searches carsforsale by car, rather than advert or user
 		for (Advert a : carsForSale.keySet()) {
 			if (a.getCar() == car) {
 				return true;
@@ -33,14 +34,15 @@ public class Auctioneer {
 		 * SOLD CARS:\N
 		 * [advert.car.id] - Purchased by [user.fullname] with a successful £[advert.arrayoffers[offer].value] bid.\n
 		 * */
+		DecimalFormat d = new DecimalFormat("0.00");
 		StringBuffer output = new StringBuffer();
 		output.append("SOLD CARS:\n");
 		//for each advert in soldCars:
 		for (Advert advert : soldCars.keySet()) {
 			output.append(advert.getCar().getId());
 			output.append(" - Purchased by ");
-			output.append(advert.getHighestOffer().getBuyer());
-			output.append(" with a successful £" + advert.getHighestOffer().getValue() + "bid.\n"); 
+			output.append(advert.getHighestOffer().getBuyer().getName());
+			output.append(" with a successful £" + d.format(advert.getHighestOffer().getValue()) + " bid.\n"); 
 		}
 		return output.toString();
 		
@@ -55,57 +57,60 @@ public class Auctioneer {
 		output.append("UNSOLD CARS:\n");
 		for (Advert advert : unsoldCars.keySet()) {
 			if (unsoldCars.containsKey(advert)) {
-				output.append(advert.toString()); //TODO not returning anything? because endsale isnt doing the right thing?
+				output.append(advert.toString());
 			}
 		}
 		return output.toString();
 	}
 	
 	public void endSale(Advert advert) {
-		if (unsoldCars.containsKey(advert)) {	//unsoldCars.containsKey(advert) && 
-			System.out.println("first if works");
-			
-				if ((advert.getHighestOffer()).getValue() <= advert.getCar().getPrice()) {
-					soldCars.put(advert, unsoldCars.get(advert)); //TODO user from placeOffer with highest bid
-					unsoldCars.remove(advert);
-					System.out.println("sale ended");
-				}
-			
-			
-			//System.out.println("price not lower / not working");
-		} else {
-			throw new IllegalArgumentException("advert not in unsold cars");
+		//if highest offer is greater than asking price, add to sold cars
+		//if price not reached, add to unsold cars
+		//remove from carsforsale
+		
+		if (advert == null) {
+			throw new IllegalArgumentException("cannot take null parameters");
 		}
 		
+		if (advert.getHighestOffer().getValue() >= advert.getCar().getPrice()) {
+			soldCars.put(advert, advert.getHighestOffer().getBuyer());
+		} else {
+			unsoldCars.put(advert, carsForSale.get(advert));
+		}
+		carsForSale.remove(advert);
 	}
 	
 	public boolean placeOffer(Advert carAdvert, User user, double value) {
-		try {
-			if (this.checkExistence(carAdvert.getCar())) {
+		//check parameters are valid, and car is for sale
+		//return true if offer is placed
+		//false if not
+		
+		if (carAdvert == null || user == null || value < 0) {
+			throw new IllegalArgumentException("cannot take null parameters");
+		} else {
+			if (carsForSale.containsKey(carAdvert)) {
 				carAdvert.placeOffer(user, value);
 				return true;
 			} else {
 				return false;
 			}
-		} catch (NullPointerException e) {
-			throw new IllegalArgumentException("advert does not exist");
 		}
 	}
 	
 	public void registerCar(Advert carAdvert, User user, String colour, CarType type, CarBody body, int noOfSeats) {
-		if (!unsoldCars.containsKey(carAdvert)) {
-			try {
+		try {
+			if (!checkExistence(carAdvert.getCar())) {
 				carAdvert.getCar().setBody(body);
 				carAdvert.getCar().setColour(colour);
 				carAdvert.getCar().setGearbox(type);
 				carAdvert.getCar().setNumberOfSeats(noOfSeats);
 				
 				carsForSale.put(carAdvert, user);
-				unsoldCars.put(carAdvert, user);
-			} catch (NullPointerException e) {
-				throw new IllegalArgumentException("parameters should not be null");
 			}
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("parameters should not be null");
 		}
+		
 	}
 	
 	//getters setters

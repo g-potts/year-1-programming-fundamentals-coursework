@@ -7,7 +7,6 @@ public class Offer {
 	private double value;
 	private User buyer;
 	
-	//constructor, checks for invalid offer amount
 	public Offer(User buyer, double value) { 
 		if (value > 0 && buyer != null) {
 			this.value = value;
@@ -16,7 +15,8 @@ public class Offer {
 			throw new IllegalArgumentException("offer has invalid amount");
 		}
 	}
-	//getters
+	
+	//getters/setters
 	public User getBuyer() {
 		return this.buyer;
 	}
@@ -25,7 +25,7 @@ public class Offer {
 		return this.value;
 	}
 	
-	//tostring: fullname offered £value
+	//toString format: fullname offered £value
 	@Override
 	public String toString() {
 		DecimalFormat d = new DecimalFormat("0.00");

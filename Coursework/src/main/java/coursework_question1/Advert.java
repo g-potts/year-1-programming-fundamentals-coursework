@@ -2,7 +2,6 @@ package coursework_question1;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Advert {
 	
@@ -11,24 +10,31 @@ public class Advert {
 	
 	//constructor
 	public Advert(Car car) { 
+		if (car == null) {
+			throw new IllegalArgumentException("car cannot be null");
+		}
 		this.car = car;
 		this.offers = new ArrayList<Offer>();
 	}
+	
 	//methods
 	public Offer getHighestOffer() {
-		System.out.println(offers.toString());
-		Offer highestOffer = offers.get(0);
-		System.out.println("before for each loop in highestoffer");
-		for (int i = 0; i < offers.size(); i++) {
-			
-				if (offers.get(i).getValue() >= highestOffer.getValue()) {
-					highestOffer = offers.get(i);
-				}
-			
-			
-		}
-		return highestOffer;
+		//if list is null, raise exception
+		//set highest to first in list
+		//for each item in list, compare and change if higher
+		//return final offer object
 		
+		if (offers.size() == 0) {
+			throw new NullPointerException("no offers under this advert");
+		} else {
+			Offer highest = offers.get(0);
+			for (Offer o : offers) {
+				if (o.getValue() > highest.getValue()) {
+					highest = o;
+				}
+			}
+			return highest;
+		}
 	}
 	
 	public boolean placeOffer(User buyer, double value) {
@@ -59,6 +65,7 @@ public class Advert {
 	public String toString() {
 		return ("Ad: " + car.displayCarSpecification() + "\n");
 	}
+	
 	//getters setters
 	public Car getCar() {
 		return this.car;
