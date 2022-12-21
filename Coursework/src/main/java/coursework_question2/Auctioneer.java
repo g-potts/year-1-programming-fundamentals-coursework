@@ -1,10 +1,10 @@
-package coursework_question1;
+package coursework_question2;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Auctioneer { //TODO add comments in professional style
+public class Auctioneer { //TODO add comments after made in q1
 	
 	protected String name;
 	protected Map<Advert, User> carsForSale; //cars currently for sale

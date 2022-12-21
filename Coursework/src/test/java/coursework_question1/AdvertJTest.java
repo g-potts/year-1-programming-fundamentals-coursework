@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class AdvertJTest { //TODO wholeass jtest
+public class AdvertJTest { //TODO wholeass jtest [q1 advert test]
 	Advert advert = new Advert(new Car(/*parameters ugh*/));
 			
 	//test null construction
