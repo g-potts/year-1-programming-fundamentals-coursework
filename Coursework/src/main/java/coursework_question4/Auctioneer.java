@@ -1,5 +1,9 @@
 package coursework_question4;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +46,7 @@ public class Auctioneer extends Dealership { //TODO add comments after made in q
 	
 	@Override
 	public String displayStatistics() {
-		return "Statistics";
+		//TODO auctioneer - name + txt file contents
 	}
 	
 	@Override
@@ -63,6 +67,9 @@ public class Auctioneer extends Dealership { //TODO add comments after made in q
 		}
 		
 		if (advert.getHighestOffer().getValue() >= advert.getCar().getPrice()) {
+			Seller seller = carsForSale.get(advert);
+			updateStatistics(seller); 
+			
 			soldCars.put(advert, advert.getHighestOffer().getBuyer());
 		} else {
 			unsoldCars.put(advert, carsForSale.get(advert));
@@ -102,6 +109,68 @@ public class Auctioneer extends Dealership { //TODO add comments after made in q
 			throw new IllegalArgumentException("parameters should not be null");
 		}
 		
+	}
+	
+	private void updateStatistics(Seller seller) {
+		//TODO updates number of automatic and manual cars, and their top seller. top = most sales. can add more private methods
+		//gets most recent sale? and type?
+		Seller s = null;
+		Advert advert = null;
+		for (Advert a : carsForSale.keySet()) {
+			s = carsForSale.get(a);
+			if (s == seller) {
+				advert = a;
+				break;
+			}
+		}
+		//get numbers from file
+		
+		int totalSales = seller.getSales();
+		int manualSales = 0;
+		int autoSales = 0;
+		double pcM = 0;
+		double pcA = 0;
+		
+		File stats = new File("auction_statistics.txt");
+		try {
+			if (stats.createNewFile()) { //make new file if need to
+				
+			} else {
+				//read from file
+				//get number from automatic, line 2
+				//get numebr from manual, line 3
+				BufferedReader b = new BufferedReader(new FileReader(stats));
+				String line = b.readLine();
+				while (b != null) {
+					System.out.println(line);
+					line = b.readLine();
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		switch (advert.getCar().getGearbox()) {
+		case MANUAL:
+			break;
+		case AUTOMATIC:
+			break;
+		default:
+			throw new IllegalArgumentException("gearbox is not proper type");
+		}
+		//calls save in file to get new values and change values
+	}
+	
+	private void saveInFile(int noOfSales, double percentageOfAutomatic, double percentageOfManual) {
+		//TODO auction_statistics.txt no calculcations just saves file
+		/*
+		 * Total Auction Sales: n
+		 * Automatic Cars: 0.0%
+		 * manual same
+		 * top seller: seller.tostring
+		 */
 	}
 	
 	//getters setters
