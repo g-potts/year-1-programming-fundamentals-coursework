@@ -13,13 +13,17 @@ public abstract class User {
 	}
 	
 	public String getName() {
-		return (fullname.split(" ")[0]);
+		return (getFullname().split(" ")[0]);
 	}
 	
 	public String getFullName() {
-		return fullname;
+		return getFullname();
 	}
 	
 	@Override
 	public abstract String toString();
+
+	public String getFullname() {
+		return fullname;
+	}
 }

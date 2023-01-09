@@ -1,8 +1,10 @@
 package coursework_question4;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -46,7 +48,26 @@ public class Auctioneer extends Dealership { //TODO add comments after made in q
 	
 	@Override
 	public String displayStatistics() {
-		//TODO auctioneer - name + txt file contents
+		String output = "";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("auction_statistics.txt"));
+			String line = br.readLine();
+			String fullFile = line;
+			line = br.readLine(); //adds first line outside of loop so that a line break is not added to the very end, which causes the jtest to fail
+			while (line != null) {
+				fullFile += "\n";
+				fullFile += line;
+				line = br.readLine();
+			}
+			br.close();
+			output += "** Auctioneer - " + name + "**\n";
+			output += fullFile;
+		} catch (IOException e) {
+			//TODO check all exceptions in this class and make print errors
+			e.printStackTrace();
+		}
+		return output;
+
 	}
 	
 	@Override
@@ -68,9 +89,12 @@ public class Auctioneer extends Dealership { //TODO add comments after made in q
 		
 		if (advert.getHighestOffer().getValue() >= advert.getCar().getPrice()) {
 			Seller seller = carsForSale.get(advert);
-			updateStatistics(seller); 
-			
+			seller.increaseSale();
+			if (sales.replace(seller, seller.getSales()) == null) {
+				sales.put(seller, 1);
+			}
 			soldCars.put(advert, advert.getHighestOffer().getBuyer());
+			updateStatistics(seller);
 		} else {
 			unsoldCars.put(advert, carsForSale.get(advert));
 		}
@@ -112,65 +136,71 @@ public class Auctioneer extends Dealership { //TODO add comments after made in q
 	}
 	
 	private void updateStatistics(Seller seller) {
-		//TODO updates number of automatic and manual cars, and their top seller. top = most sales. can add more private methods
-		//gets most recent sale? and type?
-		Seller s = null;
-		Advert advert = null;
-		for (Advert a : carsForSale.keySet()) {
-			s = carsForSale.get(a);
-			if (s == seller) {
-				advert = a;
-				break;
-			}
-		}
-		//get numbers from file
-		
-		int totalSales = seller.getSales();
+		int totalSales = soldCars.size();
 		int manualSales = 0;
 		int autoSales = 0;
 		double pcM = 0;
 		double pcA = 0;
 		
-		File stats = new File("auction_statistics.txt");
-		try {
-			if (stats.createNewFile()) { //make new file if need to
-				
-			} else {
-				//read from file
-				//get number from automatic, line 2
-				//get numebr from manual, line 3
-				BufferedReader b = new BufferedReader(new FileReader(stats));
-				String line = b.readLine();
-				while (b != null) {
-					System.out.println(line);
-					line = b.readLine();
-				}
+		for (Advert a : soldCars.keySet()) {
+			if (a.getCar().getGearbox() == CarType.MANUAL) {
+				manualSales++;
+			} else if (a.getCar().getGearbox() == CarType.AUTOMATIC) {
+				autoSales++;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			
 		}
 		
-		
-		
-		switch (advert.getCar().getGearbox()) {
-		case MANUAL:
-			break;
-		case AUTOMATIC:
-			break;
-		default:
-			throw new IllegalArgumentException("gearbox is not proper type");
+		if (totalSales != 0) {
+			pcM = ((double) (manualSales) /totalSales) * 100.0;
+			pcA = ((double) (autoSales) / totalSales) * 100.0;
 		}
-		//calls save in file to get new values and change values
+		setTopSeller();
+		saveInFile(totalSales, pcA, pcM);
+	}
+	
+	private void setTopSeller() {
+		for (Seller s : sales.keySet()) {
+			if (topSeller == null) {
+				topSeller = s;
+			} else if (sales.get(s) > sales.get(topSeller)) {
+				topSeller = s;
+			}
+		}
 	}
 	
 	private void saveInFile(int noOfSales, double percentageOfAutomatic, double percentageOfManual) {
-		//TODO auction_statistics.txt no calculcations just saves file
+		//TODO auction_statistics.txt no calculations just saves file
 		/*
 		 * Total Auction Sales: n
 		 * Automatic Cars: 0.0%
 		 * manual same
 		 * top seller: seller.tostring
 		 */
+		DecimalFormat d = new DecimalFormat("#00.0");
+		File stats = new File("auction_statistics.txt");	
+		//delete file if need to
+		stats.delete();
+		//make new file
+		try {
+			stats.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//add values to file
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(stats));
+			
+			bw.write("Total Auction Sales: " + noOfSales + "\n");
+			bw.write("Automatic Cars: " + d.format(percentageOfAutomatic) + "%\n");
+			bw.write("Manual Cars: " + d.format(percentageOfManual) + "%\n");
+			bw.write("Top Seller: " + topSeller);
+			
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//close connection
 	}
 	
 	//getters setters

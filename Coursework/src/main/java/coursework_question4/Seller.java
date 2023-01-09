@@ -2,7 +2,7 @@ package coursework_question4;
 
 public class Seller extends User {
 	
-	private int sales;
+	private int sales = 0;
 	
 	public Seller(String fullname) {
 		super(fullname);
@@ -22,13 +22,18 @@ public class Seller extends User {
 	
 	@Override
 	public String toString() {
-		String output = getName() + " " + getFullName().split(" ")[1].charAt(0) + ". ";
-		output += "(Sales: " + sales + ", Rating: " + identifyRating() + ")";
+		//FORMAT: First L. (Sales: n, Rating: Level n)
+		String output = getName() + " " + getFullName().split(" ")[1].charAt(0) + ". "; //first name last initial
+		output += "(Sales: " + sales + ", Rating: " + identifyRating() + ")"; //bracket part
 		return output;
 	}
 	
 	public int getSales() {
 		return sales;
+	}
+	
+	public void increaseSale() {
+		sales++;
 	}
 
 }

@@ -36,7 +36,7 @@ public class TraderJTest {
     trader.registerCar(ad, seller, "Blue", CarType.AUTOMATIC, CarBody.HATCHBACK, 5);
     trader.placeOffer(ad, buyer, 20000);
     assertEquals(
-        "SOLD CARS:\n" + "1234 - Purchased by S***a with a successful £20000.00 bid. \n" + "",
+        "SOLD CARS:\n" + "1234 - Purchased by S***a with a successful £20000.00 bid.\n",
         trader.displaySoldCars());
     System.out.println(trader.displaySoldCars());
 

@@ -1,12 +1,17 @@
 package coursework_question4;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Trader extends Dealership {
 	
-	protected String name;
 	private List<Seller> sellers;
 	
 	public Trader(String name) {
@@ -38,9 +43,35 @@ public class Trader extends Dealership {
 		
 	}
 	
+	private int getTotalSales() {
+		int sales = 0;
+		for (Seller s : sellers) {
+			sales += s.getSales();
+		}
+		return sales;
+	}
+	
 	@Override
 	public String displayStatistics() {
-		return "Statistics";
+		String output = "";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("trade_statistics.txt"));
+			String line = br.readLine();
+			String fullFile = line;
+			line = br.readLine();
+			while (line != null) {
+				fullFile += "\n";
+				fullFile += line;
+				line = br.readLine();
+			}
+			br.close();
+			output += "** Trader - " + name + "**\n";
+			output += fullFile;
+		} catch (IOException e) {
+			//TODO check all exceptions in this class and make print errors
+			e.printStackTrace();
+		}
+		return output;
 	}
 	
 	@Override
@@ -61,7 +92,10 @@ public class Trader extends Dealership {
 		}
 		unsoldCars.remove(advert);
 		if (advert.getHighestOffer().getValue() >= advert.getCar().getPrice()) {
+			Seller s = carsForSale.get(advert);
 			soldCars.put(advert, advert.getHighestOffer().getBuyer());
+			updateStatistics(s);
+			
 		} else {
 			unsoldCars.put(advert, carsForSale.get(advert));
 		}
@@ -101,4 +135,44 @@ public class Trader extends Dealership {
 		}
 		
 	}
+	
+	private void updateStatistics(Seller seller) {
+		seller.increaseSale();
+		if (!sellers.contains(seller)) {
+			sellers.add(seller);
+		}
+		
+		
+		saveInFile(getTotalSales());
+		//sellers.sort(null);
+	}
+	
+	private void saveInFile(int noOfSales) {
+		File file = new File("trade_statistics.txt");
+		
+		file.delete();
+		//make new file
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//add values to file
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			
+			bw.write("Total Sales: " + noOfSales + "\n");
+			bw.write("All Sellers:\n");
+			for (Seller s : sellers) {
+				bw.write("\t" + s.toString() + "\n");
+			}
+			
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
